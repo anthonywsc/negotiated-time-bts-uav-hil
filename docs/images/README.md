@@ -18,3 +18,7 @@ These images document the archived six-UAV HIL experiment. Source originals were
 Figures 11 through 14 are from the archived final-submission LaTeX assets dated August 10, 2026. The interface screenshot is from the archived local UE4 screenshot collection. The hardware photograph depicts the HIL bench.
 
 The two RflySim / UE4 overview screenshots were copied from the supplied PNG files without cropping or resizing.
+
+## Homepage hero image
+
+`ue4-mountain-scene-hero.png` is the user-supplied RflySim3D / UE4 mountainous-scene screenshot added on November 7, 2026. The original PNG was copied without cropping, resizing, or changing the displayed trails.
