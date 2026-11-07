@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the corresponding paper."
+title: "Negotiated-Time BTS Formation Control for Six UAVs in RflySim/PX4 HIL"
+authors:
+  - family-names: "To be updated"
+    given-names: "To be updated"
+version: "0.1.0"
+date-released: "2026-08-04"
+repository-code: "https://github.com/USERNAME/negotiated-time-bts-uav-hil"
+license: "NOASSERTION"
+
