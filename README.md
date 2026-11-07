@@ -2,6 +2,26 @@
 
 This repository contains the research code for a six-UAV negotiated-time bounded-time synchronized (BTS) formation-control experiment. The implementation targets a USB hardware-in-the-loop (HIL) workflow using RflySim, CopterSim, RflySim3D/UE4, and external PX4-compatible flight controllers.
 
+## RflySim / UE4 Hardware-in-the-Loop Overview
+
+RflySim connects simulated vehicle dynamics with physical flight controllers. In this project, CopterSim runs the vehicle model and exchanges simulated sensor data and actuator commands with external PX4 flight controllers. RflySim3D, based on Unreal Engine 4 (UE4), visualizes the resulting vehicle poses and environment.
+
+![Close-up of a simulated quadrotor in the RflySim3D UE4 environment](docs/images/rflysim-ue4-vehicle-closeup.png)
+
+*Close-up of the simulated vehicle and terrain in RflySim3D / UE4.*
+
+![Multiple simulated UAVs displayed in the RflySim3D UE4 environment](docs/images/rflysim-ue4-multiuav-scene.png)
+
+*Multiple UAVs displayed in a shared UE4 scene. Both screenshots show the visualization environment used to present the simulated vehicles.*
+
+The HIL loop combines three components:
+
+1. **CopterSim** updates the simulated vehicle motion and supplies sensor measurements to the flight-controller hardware.
+2. **Physical PX4 flight controllers** execute the onboard control software and return actuator commands to the simulator, closing the feedback loop.
+3. **RflySim3D / UE4** displays vehicle motion in the virtual environment, while QGroundControl provides monitoring and configuration.
+
+The repository's BTS controller runs on the host computer and sends attitude and thrust commands to PX4. The hardware bench and system diagram below show how these components are connected for the six-UAV experiment. See the [RflySim toolchain overview](https://rflysim.com/doc/en/1/CoreAppIntro.html) and [CopterSim documentation](https://rflysim.com/doc/en/3.Soft/coptersim.html) for platform details.
+
 The released code focuses on the controller, trajectory plotting, and sanitized launch templates. It does not include RflySim, PX4 firmware, CopterSim, QGroundControl, binary logs, raw screenshot collections, or hardware-specific private configuration. Selected experiment images are included in `docs/images` for documentation.
 
 To run the complete HIL workflow, a full local RflySim/PX4PSP environment must already be installed and configured. This repository is not a standalone simulator package. It must be used together with RflySim, CopterSim, RflySim3D/UE4, QGroundControl, the RflySim Python SDK, and the required external PX4-compatible flight controllers.
