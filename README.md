@@ -14,7 +14,7 @@ This repository contains the research code for a six-UAV negotiated-time bounded
 
 
 
-RflySim connects simulated vehicle dynamics with physical flight controllers. In this project, CopterSim runs the vehicle model and exchanges simulated sensor data and actuator commands with external PX4 flight controllers. RflySim3D, based on Unreal Engine 4 (UE4), visualizes the resulting vehicle poses and environment.
+The RflySim platform combines vehicle dynamics, physical PX4 flight controllers, and a three-dimensional environment rendered by RflySim3D / Unreal Engine 4 (UE4). The screenshots below show the visualization component.
 
 
 
@@ -34,25 +34,13 @@ RflySim connects simulated vehicle dynamics with physical flight controllers. In
 
 
 
-The HIL loop combines three components:
+### Flight Controller and HIL Data Flow
 
+<p align="center"><img src="docs/images/flight-controller-open-case.jpg" alt="Flight-controller circuit board with its enclosure removed, showing the USB connector and peripheral connectors" width="460"></p>
 
+*Flight-controller hardware with the enclosure removed. The photograph shows the USB connector and peripheral connectors on the board.*
 
-1. **CopterSim** updates the simulated vehicle motion and supplies sensor measurements to the flight-controller hardware.
-
-2. **Physical PX4 flight controllers** execute the onboard control software and return actuator commands to the simulator, closing the feedback loop.
-
-3. **RflySim3D / UE4** displays vehicle motion in the virtual environment, while QGroundControl provides monitoring and configuration.
-
-
-
-The repository's BTS controller runs on the host computer and sends attitude and thrust commands to PX4. The hardware bench and system diagram below show how these components are connected for the six-UAV experiment. See the [RflySim toolchain overview](https://rflysim.com/doc/en/1/CoreAppIntro.html) and [CopterSim documentation](https://rflysim.com/doc/en/3.Soft/coptersim.html) for platform details.
-
-
-
-### UDP Communication in This Implementation
-
-The host-side Python controller connects to six CopterSim/PX4 endpoints through the RflySim `PX4MavCtrlV4` SDK. Each vehicle has its own ID and UDP endpoint. The launch template selects `Mavlink_Full`, and the controller starts the matching MAVLink receive loop with `InitMavLoop()`. MAVLink defines the control and telemetry messages, while UDP transports those messages between the host-side applications.
+The host computer runs the formation algorithm and exchanges control messages with six CopterSim/PX4 endpoints over UDP/MAVLink. At each control update, it reads the vehicle feedback and supplies attitude and thrust setpoints. CopterSim connects to the physical PX4 boards through USB serial, delivering simulated sensor measurements and receiving actuator outputs. Those outputs drive the simulated vehicle dynamics, and the resulting poses are sent over UDP to UE4 for display. This separates the host's network communication, the physical flight-controller connection, and the visualization stream.
 
 ```mermaid
 flowchart LR
@@ -60,12 +48,6 @@ flowchart LR
     B <-->|USB serial: simulated sensors and actuator commands| C[Physical PX4 flight controllers]
     B -->|UDP visualization data| D[RflySim3D / UE4]
 ```
-
-| Communication path | Information exchanged | Role |
-| --- | --- | --- |
-| Python controller and CopterSim/PX4 endpoints | Vehicle state feedback and desired attitude/thrust commands | Runs the BTS outer-loop controller |
-| CopterSim and physical PX4 controllers | Simulated sensor measurements and actuator commands over USB serial | Closes the hardware-in-the-loop feedback loop |
-| CopterSim and RflySim3D / UE4 | Vehicle pose updates over the visualization interface | Displays the simulated vehicle motion |
 
 **Vehicle addressing.** The default controller address is `127.0.0.1`, with vehicle IDs 1 through 6. In the installed SDK, the default base port is `20100 + 2 * (vehicle_ID - 1)`, and the controller receives telemetry on the following port. For example, UAV 1 uses the 20100/20101 pair and UAV 6 uses 20110/20111. MAVLink replies use the peer endpoint learned by the receive connection. Match the SDK, simulator mode, IDs, IP settings, and port allocation when configuring a different installation.
 

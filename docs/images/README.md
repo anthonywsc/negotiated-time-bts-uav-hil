@@ -22,3 +22,7 @@ The two RflySim / UE4 overview screenshots were copied from the supplied PNG fil
 ## Homepage hero image
 
 `ue4-mountain-scene-hero.png` is the user-supplied RflySim3D / UE4 mountainous-scene screenshot added on November 7, 2026. The original PNG was copied without cropping, resizing, or changing the displayed trails.
+
+## Flight-controller photograph
+
+`flight-controller-open-case.jpg` is the user-supplied photograph added on November 8, 2026. The original image is preserved, and its display width is limited in the README for readability.
